@@ -45,19 +45,20 @@
   }
   .field::placeholder{ color:#A8A29E; font-weight:400; }
   .field:hover{ border-color:#D6D3D1; }
-  .field:focus{ outline:none; border-color:#0EA5E9; box-shadow:0 0 0 4px rgba(14,165,233,.14); }
+  .field:focus{ outline:none; border-color:#F59E0B; box-shadow:0 0 0 4px rgba(245,158,11,.14); }
   .field.is-invalid{ border-color:#EF4444; box-shadow:0 0 0 4px rgba(239,68,68,.12); }
   .field.no-pad-right{ padding-right:52px; }
   .err{ display:none; align-items:center; gap:6px; color:#DC2626; font-size:12.5px; font-weight:600; margin-top:7px; }
   .err.show{ display:flex; animation:fadeUp .25s ease both; }
 
+  /* ---------- Boutons & Éléments Orangés ---------- */
   .btn-primary{
     position:relative; overflow:hidden; width:100%; height:54px; border-radius:14px; font-weight:700;
-    color:#fff; background:linear-gradient(115deg,#4F46E5,#0EA5E9);
-    box-shadow:0 14px 30px -14px rgba(14,165,233,.75);
+    color:#fff; background:linear-gradient(115deg,#F59E0B,#EA580C);
+    box-shadow:0 14px 30px -14px rgba(245,158,11,.75);
     transition:transform .18s, box-shadow .18s, filter .18s;
   }
-  .btn-primary:hover{ transform:translateY(-1px); filter:brightness(1.05); box-shadow:0 20px 38px -16px rgba(14,165,233,.85); }
+  .btn-primary:hover{ transform:translateY(-1px); filter:brightness(1.05); box-shadow:0 20px 38px -16px rgba(245,158,11,.85); }
   .btn-primary:active{ transform:translateY(0) scale(.995); }
   .btn-primary::before{
     content:""; position:absolute; top:0; left:-60%; width:42%; height:100%;
@@ -70,7 +71,7 @@
   @keyframes spin{ to{ transform:rotate(360deg);} }
 
   .check{ width:20px; height:20px; border-radius:7px; border:1.5px solid #D6D3D1; background:#fff; display:inline-flex; align-items:center; justify-content:center; transition:.18s; flex:none; }
-  input.peer:checked + .check{ background:#0EA5E9; border-color:#0EA5E9; }
+  input.peer:checked + .check{ background:#F59E0B; border-color:#F59E0B; }
   input.peer:checked + .check svg{ opacity:1; transform:scale(1); }
   .check svg{ opacity:0; transform:scale(.6); transition:.18s; }
 
@@ -78,6 +79,26 @@
   @keyframes shake{ 10%,90%{transform:translateX(-2px);} 20%,80%{transform:translateX(4px);} 30%,50%,70%{transform:translateX(-7px);} 40%,60%{transform:translateX(7px);} }
   @keyframes fadeUp{ from{ opacity:0; transform:translateY(10px);} to{ opacity:1; transform:translateY(0);} }
   .fade-up{ animation:fadeUp .5s ease both; }
+
+  /* ---------- Loader Plein Écran ---------- */
+  #loaderView {
+    position: fixed;
+    inset: 0;
+    background-color: #FDFAEF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+
+  .loader {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 6px solid #F0E6C0;
+    border-top-color: #E3B505;
+    animation: spin 0.9s linear infinite;
+  }
 
   /* Styles pour la vue Application (Iframe) */
   #appView {
@@ -118,7 +139,7 @@
 
   .hidden { display: none !important; }
 
-  ::selection{ background:rgba(14,165,233,.22); }
+  ::selection{ background:rgba(245,158,11,.22); }
   @media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; } }
 </style>
 </head>
@@ -134,7 +155,7 @@
             <svg viewBox="0 0 48 48" class="h-14 w-14" role="img" aria-label="Keryan Analystic">
               <defs>
                 <linearGradient id="kGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#38BDF8"/><stop offset="1" stop-color="#6366F1"/>
+                  <stop offset="0" stop-color="#FBBF24"/><stop offset="1" stop-color="#EA580C"/>
                 </linearGradient>
               </defs>
               <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#kGrad)"/>
@@ -201,7 +222,7 @@
               </span>
               <span class="text-[13.5px] font-medium text-stone-600">Se souvenir de moi</span>
             </label>
-            <span class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2.5 py-1 text-[12px] font-semibold text-emerald-600">
+            <span class="inline-flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1 text-[12px] font-semibold text-amber-600">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
               Chiffré
             </span>
@@ -218,6 +239,11 @@
       </div>
     </div>
   </main>
+
+  <!-- LOADER PLEIN ÉCRAN -->
+  <div id="loaderView" class="hidden">
+    <div class="loader"></div>
+  </div>
 
   <!-- VUE DE L'APPLICATION (IFRAME) -->
   <main class="hidden" id="appView">
@@ -247,6 +273,7 @@
       const FUNCTION_NAME = "keryan-api";
 
       const loginView = document.getElementById("loginView");
+      const loaderView = document.getElementById("loaderView");
       const appView = document.getElementById("appView");
       const loginForm = document.getElementById("loginForm");
       const loginButton = document.getElementById("loginButton");
@@ -276,6 +303,7 @@
       function showLogin(message = "", type = "") {
         appFrame.srcdoc = "";
         appView.classList.add("hidden");
+        loaderView.classList.add("hidden");
         loginView.classList.remove("hidden");
         if (message) {
           showMessage(message, type);
@@ -285,7 +313,14 @@
         }
       }
 
+      function showLoader() {
+        loginView.classList.add("hidden");
+        appView.classList.add("hidden");
+        loaderView.classList.remove("hidden");
+      }
+
       function showApp() {
+        loaderView.classList.add("hidden");
         loginView.classList.add("hidden");
         appView.classList.remove("hidden");
       }
@@ -319,7 +354,8 @@
         loading = true;
         loginButton.disabled = true;
 
-        showMessage("Vérification de l’accès et chargement…");
+        // Affichage du loader personnalisé plein écran pendant le chargement final
+        showLoader();
 
         try {
           const { data: sessionData, error: sessionError } = await client.auth.getSession();
@@ -355,6 +391,7 @@
           }
 
           appFrame.srcdoc = data.code_html;
+          // Affichage direct de la page finale sans superposition
           showApp();
         } catch (error) {
           console.error("Chargement de l’application impossible :", error);
@@ -454,6 +491,7 @@
         if (event === "SIGNED_OUT" || !session) {
           appFrame.srcdoc = "";
           appView.classList.add("hidden");
+          loaderView.classList.add("hidden");
           loginView.classList.remove("hidden");
         }
       });
