@@ -1,268 +1,229 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#080b12">
-  <title>Keryan Analystic — Connexion</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Connexion — Keryan Analystic</title>
+<meta name="description" content="Connexion sécurisée à Keryan Analystic." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style>
+  *{ -webkit-tap-highlight-color: transparent; }
+  body{ font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  .font-display{ font-family:'Sora','Plus Jakarta Sans',sans-serif; }
 
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #080b12;
-      --panel: #111827;
-      --text: #eef2ff;
-      --muted: #a6b0c5;
-      --accent: #5b8cff;
-      --accent2: #8b5cf6;
-      --border: #263247;
-      --error: #ff7777;
-      --ok: #67e8a5;
-    }
+  /* ---------- Fond chaud / élégant ---------- */
+  .bg-warm{
+    background:
+      radial-gradient(720px 460px at 88% -8%, rgba(255,214,140,.34), transparent 62%),
+      radial-gradient(680px 520px at 4% 104%, rgba(224,231,255,.42), transparent 64%),
+      linear-gradient(168deg, #FFFFFF 0%, #FFFDF6 38%, #FFF7E6 72%, #FCEFD3 100%);
+  }
 
-    * { box-sizing: border-box; }
+  /* ---------- Logo ---------- */
+  .logo-mark{ animation:floaty 7s ease-in-out infinite; }
+  @keyframes floaty{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-4px);} }
+  .logo-dot{ animation:blink 2.6s ease-in-out infinite; transform-origin:center; }
+  @keyframes blink{ 0%,100%{ opacity:1; r:3.4;} 50%{ opacity:.35; r:2.4;} }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: 24px;
-      display: grid;
-      place-items: center;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(ellipse at 15% 10%, #182a50 0, transparent 42%),
-        radial-gradient(ellipse at 90% 90%, #251443 0, transparent 38%),
-        var(--bg);
-    }
+  /* ---------- Carte ---------- */
+  .card{
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px);
+    border:1px solid rgba(226,232,240,.9);
+    border-radius:26px;
+    box-shadow:
+      0 1px 2px rgba(15,23,42,.04),
+      0 26px 60px -30px rgba(180,130,50,.32);
+  }
+  .field{
+    width:100%; height:52px; border-radius:14px; border:1.5px solid #E7E5E4; background:#fff;
+    padding:0 16px 0 46px; font-size:15px; color:#0B1220; font-weight:500;
+    transition:border-color .2s, box-shadow .2s, background .2s;
+  }
+  .field::placeholder{ color:#A8A29E; font-weight:400; }
+  .field:hover{ border-color:#D6D3D1; }
+  .field:focus{ outline:none; border-color:#0EA5E9; box-shadow:0 0 0 4px rgba(14,165,233,.14); }
+  .field.is-invalid{ border-color:#EF4444; box-shadow:0 0 0 4px rgba(239,68,68,.12); }
+  .field.no-pad-right{ padding-right:52px; }
+  .err{ display:none; align-items:center; gap:6px; color:#DC2626; font-size:12.5px; font-weight:600; margin-top:7px; }
+  .err.show{ display:flex; animation:fadeUp .25s ease both; }
 
-    .wrap {
-      width: min(100%, 460px);
-    }
+  .btn-primary{
+    position:relative; overflow:hidden; width:100%; height:54px; border-radius:14px; font-weight:700;
+    color:#fff; background:linear-gradient(115deg,#4F46E5,#0EA5E9);
+    box-shadow:0 14px 30px -14px rgba(14,165,233,.75);
+    transition:transform .18s, box-shadow .18s, filter .18s;
+  }
+  .btn-primary:hover{ transform:translateY(-1px); filter:brightness(1.05); box-shadow:0 20px 38px -16px rgba(14,165,233,.85); }
+  .btn-primary:active{ transform:translateY(0) scale(.995); }
+  .btn-primary::before{
+    content:""; position:absolute; top:0; left:-60%; width:42%; height:100%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.4), transparent);
+    transform:skewX(-20deg); animation:sheen 4.5s ease-in-out infinite;
+  }
+  @keyframes sheen{ 0%,74%{ left:-60%;} 100%{ left:130%;} }
+  .btn-primary:disabled{ opacity:.85; cursor:not-allowed; transform:none; }
+  .spinner{ width:18px; height:18px; border-radius:9999px; border:2px solid rgba(255,255,255,.35); border-top-color:#fff; animation:spin .7s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg);} }
 
-    .brand {
-      text-align: center;
-      margin-bottom: 22px;
-    }
+  .check{ width:20px; height:20px; border-radius:7px; border:1.5px solid #D6D3D1; background:#fff; display:inline-flex; align-items:center; justify-content:center; transition:.18s; flex:none; }
+  input.peer:checked + .check{ background:#0EA5E9; border-color:#0EA5E9; }
+  input.peer:checked + .check svg{ opacity:1; transform:scale(1); }
+  .check svg{ opacity:0; transform:scale(.6); transition:.18s; }
 
-    .mark {
-      display: inline-grid;
-      place-items: center;
-      width: 66px;
-      height: 66px;
-      border-radius: 20px;
-      margin-bottom: 12px;
-      font-weight: 900;
-      font-size: 25px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 12px 38px #4f46e555;
-    }
+  .shake{ animation:shake .5s cubic-bezier(.36,.07,.19,.97) both; }
+  @keyframes shake{ 10%,90%{transform:translateX(-2px);} 20%,80%{transform:translateX(4px);} 30%,50%,70%{transform:translateX(-7px);} 40%,60%{transform:translateX(7px);} }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(10px);} to{ opacity:1; transform:translateY(0);} }
+  .fade-up{ animation:fadeUp .5s ease both; }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(25px, 5vw, 32px);
-      letter-spacing: -.7px;
-    }
+  /* Styles pour la vue Application (Iframe) */
+  #appView {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
 
-    .subtitle {
-      color: var(--muted);
-      margin: 8px 0 0;
-      font-size: 14px;
-    }
+  .appbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 18px;
+    background: #111827;
+    color: #eef2ff;
+    border: 1px solid #263247;
+    border-radius: 16px 16px 0 0;
+    font-size: 14px;
+  }
 
-    .card {
-      background: linear-gradient(180deg, #131c2d, var(--panel));
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: clamp(20px, 5vw, 30px);
-      box-shadow: 0 25px 90px #0008;
-    }
+  #appFrame {
+    display: block;
+    width: 100%;
+    height: calc(100vh - 90px);
+    min-height: 560px;
+    background: white;
+    border: 1px solid #263247;
+    border-top: 0;
+    border-radius: 0 0 16px 16px;
+  }
 
-    .card h2 {
-      margin: 0 0 6px;
-      font-size: 20px;
-    }
+  body:has(#appView:not(.hidden)) {
+    display: block;
+    padding: 14px;
+    background: #080b12;
+  }
 
-    .hint {
-      margin: 0 0 22px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-    }
+  .hidden { display: none !important; }
 
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 650;
-      margin: 16px 0 8px;
-    }
-
-    input {
-      width: 100%;
-      padding: 13px 14px;
-      border: 1px solid #344158;
-      background: #0d1320;
-      color: var(--text);
-      border-radius: 12px;
-      outline: none;
-      font: inherit;
-    }
-
-    input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px #5b8cff25;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 20px;
-      border: 0;
-      border-radius: 12px;
-      padding: 13px 16px;
-      color: white;
-      font: inherit;
-      font-weight: 750;
-      cursor: pointer;
-      background: linear-gradient(100deg, var(--accent), var(--accent2));
-    }
-
-    button:disabled {
-      opacity: .55;
-      cursor: wait;
-    }
-
-    .secondary {
-      width: auto;
-      margin: 0;
-      padding: 9px 13px;
-      font-size: 13px;
-      background: #202b40;
-      border: 1px solid #344158;
-    }
-
-    .message {
-      min-height: 20px;
-      margin: 14px 0 0;
-      font-size: 13px;
-      line-height: 1.5;
-      overflow-wrap: anywhere;
-    }
-
-    .message.error { color: var(--error); }
-    .message.success { color: var(--ok); }
-
-    .privacy {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-      margin: 18px 2px 0;
-      text-align: center;
-    }
-
-    .hidden { display: none !important; }
-
-    #appView {
-      width: 100%;
-      max-width: 1600px;
-      margin: 0 auto;
-    }
-
-    .appbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 14px;
-      background: #111827;
-      border: 1px solid var(--border);
-      border-radius: 14px 14px 0 0;
-      font-size: 13px;
-    }
-
-    #appFrame {
-      display: block;
-      width: 100%;
-      height: calc(100vh - 105px);
-      min-height: 560px;
-      background: white;
-      border: 1px solid var(--border);
-      border-top: 0;
-      border-radius: 0 0 14px 14px;
-    }
-
-    body:has(#appView:not(.hidden)) {
-      display: block;
-      padding: 14px;
-    }
-
-    @media (max-width: 560px) {
-      body { padding: 16px; }
-
-      #appFrame {
-        height: calc(100vh - 85px);
-        min-height: 480px;
-      }
-
-      .appbar { padding: 9px 10px; }
-    }
-  </style>
+  ::selection{ background:rgba(14,165,233,.22); }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; } }
+</style>
 </head>
 
-<body>
-  <main class="wrap" id="loginView">
-    <header class="brand">
-      <div class="mark" aria-hidden="true">KA</div>
-      <h1>Keryan Analystic</h1>
-      <p class="subtitle">Espace privé d’analyse</p>
-    </header>
+<body class="min-h-screen bg-warm text-[#0B1220] antialiased">
+  <!-- VUE DE CONNEXION -->
+  <main id="loginView" class="flex min-h-screen items-center justify-center px-5 py-10">
+    <div class="w-full max-w-[418px]">
+      <div id="formCard" class="card p-7 sm:p-9">
+        <!-- LOGO -->
+        <div class="mb-7 flex flex-col items-center text-center">
+          <span class="logo-mark inline-flex">
+            <svg viewBox="0 0 48 48" class="h-14 w-14" role="img" aria-label="Keryan Analystic">
+              <defs>
+                <linearGradient id="kGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#38BDF8"/><stop offset="1" stop-color="#6366F1"/>
+                </linearGradient>
+              </defs>
+              <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#kGrad)"/>
+              <path d="M11 34V14" stroke="#0B1220" stroke-opacity=".85" stroke-width="3.4" stroke-linecap="round"/>
+              <path d="M13.5 27.5l6-6.5 5 4.5L33 16.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle class="logo-dot" cx="33" cy="16.5" r="3.4" fill="#FDE68A"/>
+            </svg>
+          </span>
+          <p class="font-display mt-3 text-[20px] font-bold tracking-tight text-slate-900">
+            Keryan <span class="font-semibold text-slate-400">Analystic</span>
+          </p>
+        </div>
 
-    <section class="card">
-      <h2>Connexion</h2>
-      <p class="hint">
-        Connecte-toi avec le compte autorisé.
-        Aucun compte ne peut être créé depuis cette page.
-      </p>
+        <div id="loginHead">
+          <h1 class="font-display text-center text-[23px] font-bold tracking-[-.02em] text-slate-900">Connexion</h1>
+          <p class="mt-2 text-center text-[14px] leading-relaxed text-stone-500">
+            Accès privé. Aucun compte ne peut être créé depuis cette page.
+          </p>
+        </div>
 
-      <form id="loginForm">
-        <label for="email">Adresse e-mail</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          autocomplete="username"
-          required
-        >
+        <form id="loginForm" class="mt-7 space-y-5" novalidate>
+          <!-- E-mail -->
+          <div>
+            <label for="email" class="mb-2 block text-[11.5px] font-bold uppercase tracking-[.12em] text-stone-500">Adresse e-mail</label>
+            <div class="relative">
+              <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2.5 6.5 8.3 6a2 2 0 0 0 2.4 0l8.3-6"/></svg>
+              </span>
+              <input id="email" name="email" type="email" autocomplete="username" inputmode="email"
+                     placeholder="prenom.nom@entreprise.com" class="field" aria-describedby="emailError" required />
+            </div>
+            <p id="emailError" class="err" role="alert">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.4v.1"/></svg>
+              <span>Merci de saisir une adresse e-mail valide.</span>
+            </p>
+          </div>
 
-        <label for="password">Mot de passe</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autocomplete="current-password"
-          required
-        >
+          <!-- Mot de passe -->
+          <div>
+            <label for="password" class="mb-2 block text-[11.5px] font-bold uppercase tracking-[.12em] text-stone-500">Mot de passe</label>
+            <div class="relative">
+              <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.3" fill="currentColor" stroke="none"/></svg>
+              </span>
+              <input id="password" name="password" type="password" autocomplete="current-password"
+                     placeholder="••••••••••" class="field no-pad-right" aria-describedby="passwordError" required />
+              <button type="button" id="togglePwd" aria-label="Afficher le mot de passe"
+                      class="absolute right-2 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-xl text-stone-400 transition hover:bg-stone-100 hover:text-stone-700">
+                <svg id="eyeOpen" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.2 12S5.7 5.5 12 5.5 21.8 12 21.8 12 18.3 18.5 12 18.5 2.2 12 2.2 12Z"/><circle cx="12" cy="12" r="3.1"/></svg>
+                <svg id="eyeClosed" class="hidden" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 6.1A9.6 9.6 0 0 1 12 6c6.3 0 9.8 6 9.8 6a17 17 0 0 1-3.2 3.9M6.4 7.7A17 17 0 0 0 2.2 12S5.7 18 12 18a9.7 9.7 0 0 0 3.9-.8"/><path d="M9.9 9.9a3.1 3.1 0 0 0 4.3 4.3"/></svg>
+              </button>
+            </div>
+            <p id="passwordError" class="err" role="alert">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.4v.1"/></svg>
+              <span>Le mot de passe doit contenir au moins 6 caractères.</span>
+            </p>
+          </div>
 
-        <button id="loginButton" type="submit">
-          Se connecter
-        </button>
-      </form>
+          <div class="flex items-center justify-between">
+            <label class="inline-flex cursor-pointer select-none items-center gap-2.5">
+              <input type="checkbox" id="remember" class="peer sr-only" />
+              <span class="check">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>
+              </span>
+              <span class="text-[13.5px] font-medium text-stone-600">Se souvenir de moi</span>
+            </label>
+            <span class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2.5 py-1 text-[12px] font-semibold text-emerald-600">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+              Chiffré
+            </span>
+          </div>
 
-      <p id="loginMessage" class="message" role="status" aria-live="polite"></p>
-    </section>
+          <button type="submit" id="loginButton" class="btn-primary mt-1 flex items-center justify-center gap-2.5">
+            <span id="btnText">Se connecter</span>
+            <svg id="btnArrow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <span id="btnSpinner" class="spinner hidden"></span>
+          </button>
 
-    <p class="privacy">
-      Accès privé. Le code de l’application est demandé au serveur
-      après connexion et vérification des autorisations.
-    </p>
+          <p id="loginMessage" class="hidden text-center text-[13px] font-semibold" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
   </main>
 
+  <!-- VUE DE L'APPLICATION (IFRAME) -->
   <main class="hidden" id="appView">
     <div class="appbar">
       <strong>Keryan Analystic</strong>
-      <button class="secondary" id="logoutButton" type="button">
+      <button class="bg-[#202b40] border border-[#344158] hover:bg-[#2b3852] px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition" id="logoutButton" type="button">
         Se déconnecter
       </button>
     </div>
@@ -274,23 +235,15 @@
     ></iframe>
   </main>
 
-  <!-- Client Supabase : seule la clé publique est utilisée ici. -->
+  <!-- Client Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
     (() => {
       "use strict";
 
-      /*
-       * Configuration publique du projet.
-       * Ne jamais ajouter de clé sb_secret_ ou service_role ici.
-       */
-      const SUPABASE_URL =
-        "https://ixvlthuinkfszhutqwqd.supabase.co";
-
-      const SUPABASE_PUBLISHABLE_KEY =
-        "sb_publishable_svdzuBz5EFSrGAYuOAOEaQ_5tTaeCan";
-
+      const SUPABASE_URL = "https://ixvlthuinkfszhutqwqd.supabase.co";
+      const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_svdzuBz5EFSrGAYuOAOEaQ_5tTaeCan";
       const FUNCTION_NAME = "keryan-api";
 
       const loginView = document.getElementById("loginView");
@@ -300,20 +253,36 @@
       const loginMessage = document.getElementById("loginMessage");
       const logoutButton = document.getElementById("logoutButton");
       const appFrame = document.getElementById("appFrame");
+      const emailEl = document.getElementById("email");
+      const pwdEl = document.getElementById("password");
+      const emailErr = document.getElementById("emailError");
+      const pwdErr = document.getElementById("passwordError");
+      const formCard = document.getElementById("formCard");
+      const togglePwd = document.getElementById("togglePwd");
+      const eyeOpen = document.getElementById("eyeOpen");
+      const eyeClosed = document.getElementById("eyeClosed");
+      const btnText = document.getElementById("btnText");
+      const btnArrow = document.getElementById("btnArrow");
+      const btnSpinner = document.getElementById("btnSpinner");
 
+      const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
       let loading = false;
 
       function showMessage(message, type = "") {
         loginMessage.textContent = message;
-        loginMessage.className =
-          "message" + (type ? " " + type : "");
+        loginMessage.className = "mt-3 text-center text-[13px] font-semibold block " + (type === "error" ? "text-red-600" : type === "success" ? "text-emerald-600" : "text-stone-600");
       }
 
       function showLogin(message = "", type = "") {
         appFrame.srcdoc = "";
         appView.classList.add("hidden");
         loginView.classList.remove("hidden");
-        showMessage(message, type);
+        if (message) {
+          showMessage(message, type);
+        } else {
+          loginMessage.textContent = "";
+          loginMessage.className = "hidden";
+        }
       }
 
       function showApp() {
@@ -321,11 +290,14 @@
         appView.classList.remove("hidden");
       }
 
+      function setError(input, box, show){
+        input.classList.toggle('is-invalid', show);
+        box.classList.toggle('show', show);
+        input.setAttribute('aria-invalid', show ? 'true' : 'false');
+      }
+
       if (!window.supabase || !window.supabase.createClient) {
-        showMessage(
-          "Impossible de charger le client Supabase. Vérifie ta connexion Internet.",
-          "error"
-        );
+        showMessage("Impossible de charger le client Supabase. Vérifie ta connexion Internet.", "error");
         loginButton.disabled = true;
         return;
       }
@@ -350,9 +322,7 @@
         showMessage("Vérification de l’accès et chargement…");
 
         try {
-          const { data: sessionData, error: sessionError } =
-            await client.auth.getSession();
-
+          const { data: sessionData, error: sessionError } = await client.auth.getSession();
           if (sessionError) throw sessionError;
 
           if (!sessionData.session) {
@@ -360,10 +330,6 @@
             return;
           }
 
-          /*
-           * L'Edge Function vérifie la session et l'UID autorisé
-           * avant de renvoyer le HTML.
-           */
           const { data, error } = await client.functions.invoke(
             FUNCTION_NAME,
             {
@@ -373,75 +339,78 @@
 
           if (error) {
             let detail = error.message || "Accès refusé.";
-
             try {
-              if (
-                error.context &&
-                typeof error.context.json === "function"
-              ) {
+              if (error.context && typeof error.context.json === "function") {
                 const payload = await error.context.json();
                 if (payload && payload.error) {
                   detail = payload.error;
                 }
               }
-            } catch (_) {
-              // Conserver le message disponible.
-            }
-
+            } catch (_) {}
             throw new Error(detail);
           }
 
-          if (
-            !data ||
-            typeof data.code_html !== "string" ||
-            !data.code_html.trim()
-          ) {
-            throw new Error(
-              "Le code HTML est vide ou absent dans Supabase."
-            );
+          if (!data || typeof data.code_html !== "string" || !data.code_html.trim()) {
+            throw new Error("Le code HTML est vide ou absent dans Supabase.");
           }
 
-          /*
-           * Le HTML est affiché dans une iframe sandboxée.
-           * On n'accorde pas allow-same-origin : l'application ne partage
-           * donc pas directement l'origine du portail.
-           */
           appFrame.srcdoc = data.code_html;
           showApp();
         } catch (error) {
-          console.error(
-            "Chargement de l’application impossible :",
-            error
-          );
-
+          console.error("Chargement de l’application impossible :", error);
           await client.auth.signOut().catch(() => {});
-
           showLogin(
-            "Chargement impossible : " +
-            (error.message || "erreur inconnue") +
-            ". Vérifie le déploiement de keryan-api, " +
-            "le secret ALLOWED_USER_IDS et la configuration Supabase.",
+            "Chargement impossible : " + (error.message || "erreur inconnue") + ". Vérifie le déploiement de keryan-api, le secret ALLOWED_USER_IDS et la configuration Supabase.",
             "error"
           );
         } finally {
           loading = false;
           loginButton.disabled = false;
+          btnText.textContent = 'Se connecter';
+          btnArrow.classList.remove('hidden');
+          btnSpinner.classList.add('hidden');
         }
       }
 
+      emailEl.addEventListener('input', function(){ setError(emailEl, emailErr, false); });
+      pwdEl.addEventListener('input', function(){ setError(pwdEl, pwdErr, false); });
+
+      togglePwd.addEventListener('click', function(){
+        const show = pwdEl.type === 'password';
+        pwdEl.type = show ? 'text' : 'password';
+        eyeOpen.classList.toggle('hidden', show);
+        eyeClosed.classList.toggle('hidden', !show);
+        togglePwd.setAttribute('aria-label', show ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+        pwdEl.focus();
+      });
+
       loginForm.addEventListener("submit", async (event) => {
         event.preventDefault();
-
         if (loading) return;
 
+        const email = emailEl.value.trim();
+        const password = pwdEl.value;
+        let ok = true;
+
+        if (!EMAIL_RE.test(email)){ setError(emailEl, emailErr, true); ok = false; }
+        else setError(emailEl, emailErr, false);
+        if (password.length < 6){ setError(pwdEl, pwdErr, true); ok = false; }
+        else setError(pwdEl, pwdErr, false);
+
+        if (!ok){
+          formCard.classList.remove('shake');
+          void formCard.offsetWidth;
+          formCard.classList.add('shake');
+          showMessage('Veuillez corriger les champs signalés.', 'error');
+          return;
+        }
+
+        loading = true;
         loginButton.disabled = true;
+        btnText.textContent = 'Connexion en cours…';
+        btnArrow.classList.add('hidden');
+        btnSpinner.classList.remove('hidden');
         showMessage("Connexion en cours…");
-
-        const email =
-          document.getElementById("email").value.trim();
-
-        const password =
-          document.getElementById("password").value;
 
         try {
           const { error } = await client.auth.signInWithPassword({
@@ -454,26 +423,26 @@
           await loadApplication();
         } catch (error) {
           showMessage(
-            "Connexion impossible : " +
-            (error.message || "vérifie tes identifiants."),
+            "Connexion impossible : " + (error.message || "vérifie tes identifiants."),
             "error"
           );
-        } finally {
+          loading = false;
           loginButton.disabled = false;
+          btnText.textContent = 'Se connecter';
+          btnArrow.classList.remove('hidden');
+          btnSpinner.classList.add('hidden');
         }
       });
 
       logoutButton.addEventListener("click", async () => {
         logoutButton.disabled = true;
-
         try {
           const { error } = await client.auth.signOut();
           if (error) throw error;
           showLogin("Tu es déconnecté.", "success");
         } catch (error) {
           showMessage(
-            "La déconnexion a échoué : " +
-            (error.message || "erreur inconnue"),
+            "La déconnexion a échoué : " + (error.message || "erreur inconnue"),
             "error"
           );
         } finally {
