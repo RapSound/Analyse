@@ -289,7 +289,6 @@
         loading = true;
         loginButton.disabled = true;
 
-        // Affichage du loader personnalisé plein écran avant l'affichage final
         showLoader();
 
         try {
@@ -325,7 +324,10 @@
             throw new Error("Le code HTML est vide ou absent dans Supabase.");
           }
 
-          // Remplace entièrement la page actuelle par le projet de la base de données (sans iframe ni superposition)
+          // Laisse le loader visible un peu plus longtemps (2 secondes) pour une transition fluide
+          await new Promise(resolve => setTimeout(resolve, 2000));
+
+          // Remplacement complet et direct du contenu de la page par le projet de la base de données
           document.open();
           document.write(data.code_html);
           document.close();
@@ -406,6 +408,11 @@
           btnArrow.classList.remove('hidden');
           btnSpinner.classList.add('hidden');
         }
+      });
+
+      // Déconnexion automatique lorsque l'onglet est fermé ou supprimé
+      window.addEventListener("pagehide", () => {
+        client.auth.signOut().catch(() => {});
       });
 
       client.auth.onAuthStateChange((event, session) => {
