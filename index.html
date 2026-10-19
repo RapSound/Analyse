@@ -1,0 +1,501 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#080b12">
+  <title>Keryan Analystic — Connexion</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b12;
+      --panel: #111827;
+      --text: #eef2ff;
+      --muted: #a6b0c5;
+      --accent: #5b8cff;
+      --accent2: #8b5cf6;
+      --border: #263247;
+      --error: #ff7777;
+      --ok: #67e8a5;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 15% 10%, #182a50 0, transparent 42%),
+        radial-gradient(ellipse at 90% 90%, #251443 0, transparent 38%),
+        var(--bg);
+    }
+
+    .wrap {
+      width: min(100%, 460px);
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .mark {
+      display: inline-grid;
+      place-items: center;
+      width: 66px;
+      height: 66px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      font-weight: 900;
+      font-size: 25px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 12px 38px #4f46e555;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(25px, 5vw, 32px);
+      letter-spacing: -.7px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 8px 0 0;
+      font-size: 14px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #131c2d, var(--panel));
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: clamp(20px, 5vw, 30px);
+      box-shadow: 0 25px 90px #0008;
+    }
+
+    .card h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+
+    .hint {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 650;
+      margin: 16px 0 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #344158;
+      background: #0d1320;
+      color: var(--text);
+      border-radius: 12px;
+      outline: none;
+      font: inherit;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px #5b8cff25;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      border: 0;
+      border-radius: 12px;
+      padding: 13px 16px;
+      color: white;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+      background: linear-gradient(100deg, var(--accent), var(--accent2));
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    .secondary {
+      width: auto;
+      margin: 0;
+      padding: 9px 13px;
+      font-size: 13px;
+      background: #202b40;
+      border: 1px solid #344158;
+    }
+
+    .message {
+      min-height: 20px;
+      margin: 14px 0 0;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .message.error { color: var(--error); }
+    .message.success { color: var(--ok); }
+
+    .privacy {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      margin: 18px 2px 0;
+      text-align: center;
+    }
+
+    .hidden { display: none !important; }
+
+    #appView {
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .appbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      background: #111827;
+      border: 1px solid var(--border);
+      border-radius: 14px 14px 0 0;
+      font-size: 13px;
+    }
+
+    #appFrame {
+      display: block;
+      width: 100%;
+      height: calc(100vh - 105px);
+      min-height: 560px;
+      background: white;
+      border: 1px solid var(--border);
+      border-top: 0;
+      border-radius: 0 0 14px 14px;
+    }
+
+    body:has(#appView:not(.hidden)) {
+      display: block;
+      padding: 14px;
+    }
+
+    @media (max-width: 560px) {
+      body { padding: 16px; }
+
+      #appFrame {
+        height: calc(100vh - 85px);
+        min-height: 480px;
+      }
+
+      .appbar { padding: 9px 10px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap" id="loginView">
+    <header class="brand">
+      <div class="mark" aria-hidden="true">KA</div>
+      <h1>Keryan Analystic</h1>
+      <p class="subtitle">Espace privé d’analyse</p>
+    </header>
+
+    <section class="card">
+      <h2>Connexion</h2>
+      <p class="hint">
+        Connecte-toi avec le compte autorisé.
+        Aucun compte ne peut être créé depuis cette page.
+      </p>
+
+      <form id="loginForm">
+        <label for="email">Adresse e-mail</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="username"
+          required
+        >
+
+        <label for="password">Mot de passe</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+        >
+
+        <button id="loginButton" type="submit">
+          Se connecter
+        </button>
+      </form>
+
+      <p id="loginMessage" class="message" role="status" aria-live="polite"></p>
+    </section>
+
+    <p class="privacy">
+      Accès privé. Le code de l’application est demandé au serveur
+      après connexion et vérification des autorisations.
+    </p>
+  </main>
+
+  <main class="hidden" id="appView">
+    <div class="appbar">
+      <strong>Keryan Analystic</strong>
+      <button class="secondary" id="logoutButton" type="button">
+        Se déconnecter
+      </button>
+    </div>
+
+    <iframe
+      id="appFrame"
+      title="Application Keryan Analystic"
+      sandbox="allow-scripts allow-forms allow-downloads allow-modals"
+    ></iframe>
+  </main>
+
+  <!-- Client Supabase : seule la clé publique est utilisée ici. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      /*
+       * Configuration publique du projet.
+       * Ne jamais ajouter de clé sb_secret_ ou service_role ici.
+       */
+      const SUPABASE_URL =
+        "https://ixvlthuinkfszhutqwqd.supabase.co";
+
+      const SUPABASE_PUBLISHABLE_KEY =
+        "sb_publishable_svdzuBz5EFSrGAYuOAOEaQ_5tTaeCan";
+
+      const FUNCTION_NAME = "keryan-api";
+
+      const loginView = document.getElementById("loginView");
+      const appView = document.getElementById("appView");
+      const loginForm = document.getElementById("loginForm");
+      const loginButton = document.getElementById("loginButton");
+      const loginMessage = document.getElementById("loginMessage");
+      const logoutButton = document.getElementById("logoutButton");
+      const appFrame = document.getElementById("appFrame");
+
+      let loading = false;
+
+      function showMessage(message, type = "") {
+        loginMessage.textContent = message;
+        loginMessage.className =
+          "message" + (type ? " " + type : "");
+      }
+
+      function showLogin(message = "", type = "") {
+        appFrame.srcdoc = "";
+        appView.classList.add("hidden");
+        loginView.classList.remove("hidden");
+        showMessage(message, type);
+      }
+
+      function showApp() {
+        loginView.classList.add("hidden");
+        appView.classList.remove("hidden");
+      }
+
+      if (!window.supabase || !window.supabase.createClient) {
+        showMessage(
+          "Impossible de charger le client Supabase. Vérifie ta connexion Internet.",
+          "error"
+        );
+        loginButton.disabled = true;
+        return;
+      }
+
+      const client = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY,
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        }
+      );
+
+      async function loadApplication() {
+        if (loading) return;
+        loading = true;
+        loginButton.disabled = true;
+
+        showMessage("Vérification de l’accès et chargement…");
+
+        try {
+          const { data: sessionData, error: sessionError } =
+            await client.auth.getSession();
+
+          if (sessionError) throw sessionError;
+
+          if (!sessionData.session) {
+            showLogin("Connecte-toi pour continuer.", "error");
+            return;
+          }
+
+          /*
+           * L'Edge Function vérifie la session et l'UID autorisé
+           * avant de renvoyer le HTML.
+           */
+          const { data, error } = await client.functions.invoke(
+            FUNCTION_NAME,
+            {
+              body: { action: "get_project" }
+            }
+          );
+
+          if (error) {
+            let detail = error.message || "Accès refusé.";
+
+            try {
+              if (
+                error.context &&
+                typeof error.context.json === "function"
+              ) {
+                const payload = await error.context.json();
+                if (payload && payload.error) {
+                  detail = payload.error;
+                }
+              }
+            } catch (_) {
+              // Conserver le message disponible.
+            }
+
+            throw new Error(detail);
+          }
+
+          if (
+            !data ||
+            typeof data.code_html !== "string" ||
+            !data.code_html.trim()
+          ) {
+            throw new Error(
+              "Le code HTML est vide ou absent dans Supabase."
+            );
+          }
+
+          /*
+           * Le HTML est affiché dans une iframe sandboxée.
+           * On n'accorde pas allow-same-origin : l'application ne partage
+           * donc pas directement l'origine du portail.
+           */
+          appFrame.srcdoc = data.code_html;
+          showApp();
+        } catch (error) {
+          console.error(
+            "Chargement de l’application impossible :",
+            error
+          );
+
+          await client.auth.signOut().catch(() => {});
+
+          showLogin(
+            "Chargement impossible : " +
+            (error.message || "erreur inconnue") +
+            ". Vérifie le déploiement de keryan-api, " +
+            "le secret ALLOWED_USER_IDS et la configuration Supabase.",
+            "error"
+          );
+        } finally {
+          loading = false;
+          loginButton.disabled = false;
+        }
+      }
+
+      loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (loading) return;
+
+        loginButton.disabled = true;
+        showMessage("Connexion en cours…");
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        const password =
+          document.getElementById("password").value;
+
+        try {
+          const { error } = await client.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (error) throw error;
+
+          await loadApplication();
+        } catch (error) {
+          showMessage(
+            "Connexion impossible : " +
+            (error.message || "vérifie tes identifiants."),
+            "error"
+          );
+        } finally {
+          loginButton.disabled = false;
+        }
+      });
+
+      logoutButton.addEventListener("click", async () => {
+        logoutButton.disabled = true;
+
+        try {
+          const { error } = await client.auth.signOut();
+          if (error) throw error;
+          showLogin("Tu es déconnecté.", "success");
+        } catch (error) {
+          showMessage(
+            "La déconnexion a échoué : " +
+            (error.message || "erreur inconnue"),
+            "error"
+          );
+        } finally {
+          logoutButton.disabled = false;
+        }
+      });
+
+      client.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_OUT" || !session) {
+          appFrame.srcdoc = "";
+          appView.classList.add("hidden");
+          loginView.classList.remove("hidden");
+        }
+      });
+
+      // Restaurer une session existante après rechargement de la page.
+      client.auth.getSession().then(({ data, error }) => {
+        if (!error && data.session) {
+          loadApplication();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
