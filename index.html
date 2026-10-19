@@ -272,14 +272,15 @@
         return;
       }
 
+      // persistSession: false garantit que l'utilisateur est déconnecté lors d'un rafraîchissement de la page
       const client = window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_PUBLISHABLE_KEY,
         {
           auth: {
-            persistSession: true,
-            autoRefreshToken: true,
-            detectSessionInUrl: true
+            persistSession: false,
+            autoRefreshToken: false,
+            detectSessionInUrl: false
           }
         }
       );
@@ -324,10 +325,10 @@
             throw new Error("Le code HTML est vide ou absent dans Supabase.");
           }
 
-          // Laisse le loader visible un peu plus longtemps (2 secondes) pour une transition fluide
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          // Laisse le loader visible un peu plus longtemps pour une transition visuelle soignée
+          await new Promise(resolve => setTimeout(resolve, 2500));
 
-          // Remplacement complet et direct du contenu de la page par le projet de la base de données
+          // Remplace entièrement la page par le projet de la base de données
           document.open();
           document.write(data.code_html);
           document.close();
@@ -410,23 +411,9 @@
         }
       });
 
-      // Déconnexion automatique lorsque l'onglet est fermé ou supprimé
+      // Déconnexion automatique lorsque l'onglet est fermé
       window.addEventListener("pagehide", () => {
         client.auth.signOut().catch(() => {});
-      });
-
-      client.auth.onAuthStateChange((event, session) => {
-        if (event === "SIGNED_OUT" || !session) {
-          loaderView.classList.add("hidden");
-          loginView.classList.remove("hidden");
-        }
-      });
-
-      // Restaurer une session existante après rechargement de la page.
-      client.auth.getSession().then(({ data, error }) => {
-        if (!error && data.session) {
-          loadApplication();
-        }
       });
     })();
   </script>
