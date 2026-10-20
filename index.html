@@ -272,20 +272,25 @@
         return;
       }
 
-      // persistSession: false garantit que l'utilisateur est déconnecté lors d'un rafraîchissement de la page
       const client = window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_PUBLISHABLE_KEY,
         {
           auth: {
-            persistSession: false,
-            autoRefreshToken: false,
+            persistSession: true,
+            autoRefreshToken: true,
             detectSessionInUrl: false
           }
         }
       );
 
-      async function loadApplication() {
+      // Si l'utilisateur rafraîchit la page (F5), on le déconnecte automatiquement
+      const navEntries = performance.getEntriesByType('navigation');
+      if (navEntries.length > 0 && navEntries[0].type === 'reload') {
+        client.auth.signOut().catch(() => {});
+      }
+
+      async function loadApplication(session) {
         if (loading) return;
         loading = true;
         loginButton.disabled = true;
@@ -293,10 +298,13 @@
         showLoader();
 
         try {
-          const { data: sessionData, error: sessionError } = await client.auth.getSession();
-          if (sessionError) throw sessionError;
+          if (!session) {
+            const { data: sessionData, error: sessionError } = await client.auth.getSession();
+            if (sessionError) throw sessionError;
+            session = sessionData.session;
+          }
 
-          if (!sessionData.session) {
+          if (!session) {
             showLogin("Connecte-toi pour continuer.", "error");
             return;
           }
@@ -325,10 +333,10 @@
             throw new Error("Le code HTML est vide ou absent dans Supabase.");
           }
 
-          // Laisse le loader visible un peu plus longtemps pour une transition visuelle soignée
-          await new Promise(resolve => setTimeout(resolve, 2500));
+          // Loader visible un peu plus longtemps pour une transition soignée
+          await new Promise(resolve => setTimeout(resolve, 2000));
 
-          // Remplace entièrement la page par le projet de la base de données
+          // Remplacement complet et direct du contenu de la page par le projet de la base de données
           document.open();
           document.write(data.code_html);
           document.close();
@@ -390,14 +398,14 @@
         showMessage("Connexion en cours…");
 
         try {
-          const { error } = await client.auth.signInWithPassword({
+          const { data, error } = await client.auth.signInWithPassword({
             email,
             password
           });
 
           if (error) throw error;
 
-          await loadApplication();
+          await loadApplication(data.session);
         } catch (error) {
           showMessage(
             "Connexion impossible : " + (error.message || "vérifie tes identifiants."),
@@ -409,11 +417,6 @@
           btnArrow.classList.remove('hidden');
           btnSpinner.classList.add('hidden');
         }
-      });
-
-      // Déconnexion automatique lorsque l'onglet est fermé
-      window.addEventListener("pagehide", () => {
-        client.auth.signOut().catch(() => {});
       });
     })();
   </script>
