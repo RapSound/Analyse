@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Connexion — Keryan Analystic</title>
+<meta name="description" content="Connexion privée à Keryan Analystic.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0b1220;background:#fffaf0;font-synthesis:none;text-rendering:optimizeLegibility}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;background:radial-gradient(720px 460px at 88% -8%,rgba(255,214,140,.34),transparent 62%),radial-gradient(680px 520px at 4% 104%,rgba(224,231,255,.42),transparent 64%),linear-gradient(168deg,#fff 0%,#fffdf6 38%,#fff7e6 72%,#fcefd3 100%);display:grid;place-items:center;padding:28px 18px}
+.font-display{font-family:"Sora","Plus Jakarta Sans",sans-serif}
+.card{width:min(100%,418px);padding:30px;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border:1px solid rgba(226,232,240,.9);border-radius:26px;box-shadow:0 1px 2px #0f172a0a,0 26px 60px -30px #b4823252}
+.brand{text-align:center;margin-bottom:26px}.logo{width:56px;height:56px;animation:floaty 7s ease-in-out infinite}
+.brand-name{font:700 20px "Sora",sans-serif;letter-spacing:-.03em;margin:12px 0 0}.brand-name span{color:#94a3b8;font-weight:600}
+h1{text-align:center;font:700 23px "Sora",sans-serif;letter-spacing:-.02em;margin:0}
+.subtitle{text-align:center;color:#78716c;font-size:14px;line-height:1.6;margin:9px 0 26px}
+.field-group{margin:0 0 19px}.field-label{display:block;margin:0 0 8px;font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#78716c}
+.input-wrap{position:relative}.field-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#a8a29e;pointer-events:none;width:19px;height:19px}
+.field{display:block;width:100%;height:52px;border-radius:14px;border:1.5px solid #e7e5e4;background:#fff;padding:0 15px 0 45px;font:500 15px inherit;color:#0b1220;transition:border-color .2s,box-shadow .2s}
+.field.password{padding-right:54px}.field::placeholder{color:#a8a29e;font-weight:400}.field:hover{border-color:#d6d3d1}.field:focus{outline:none;border-color:#f59e0b;box-shadow:0 0 0 4px #f59e0b24}.field.invalid{border-color:#ef4444;box-shadow:0 0 0 4px #ef44441f}
+.toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;background:transparent;border-radius:11px;color:#78716c;cursor:pointer}.toggle:hover{background:#f5f5f4}
+.error{display:none;color:#dc2626;font-size:12.5px;font-weight:600;margin:7px 0 0}.error.show{display:block}
+.options{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:3px 0 21px;color:#57534e;font-size:13px}
+.remember{display:flex;align-items:center;gap:9px;cursor:pointer}.remember input{accent-color:#f59e0b;width:16px;height:16px}
+.secure{display:inline-flex;align-items:center;gap:6px;border-radius:9px;background:#fffbeb;padding:6px 9px;color:#b45309;font-size:12px;font-weight:700;white-space:nowrap}
+.primary{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:54px;border:0;border-radius:14px;color:#fff;background:linear-gradient(115deg,#f59e0b,#ea580c);box-shadow:0 14px 30px -14px #f59e0bbf;font:700 15px inherit;cursor:pointer;transition:transform .18s,filter .18s,box-shadow .18s}
+.primary:hover{transform:translateY(-1px);filter:brightness(1.05);box-shadow:0 20px 38px -16px #f59e0bd9}.primary:active{transform:scale(.995)}.primary:disabled{opacity:.75;cursor:wait;transform:none}
+.spinner{width:18px;height:18px;border:2px solid #ffffff60;border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+.message{font-size:13px;line-height:1.5;text-align:center;font-weight:600;margin:14px 0 0;overflow-wrap:anywhere}.message.error{color:#b91c1c}.message.success{color:#047857}.message.info{color:#57534e}
+#loaderView{position:fixed;inset:0;background:#fdfaf0;display:flex;align-items:center;justify-content:center;z-index:10}
+.loader{width:62px;height:62px;border:6px solid #f0e6c0;border-top-color:#e3b505;border-radius:50%;animation:spin .9s linear infinite}
+.hidden{display:none!important}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:420px){.card{padding:25px 21px;border-radius:22px}.options{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+::selection{background:#f59e0b38}
+</style>
+</head>
+<body>
+<main id="loginView">
+  <section class="card" aria-labelledby="pageTitle">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 48 48" role="img" aria-label="Logo Keryan Analystic">
+        <defs><linearGradient id="kGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#ea580c"/></linearGradient></defs>
+        <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#kGrad)"/>
+        <path d="M11 34V14" stroke="#0b1220" stroke-opacity=".85" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="m13.5 27.5 6-6.5 5 4.5 8.5-9" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="33" cy="16.5" r="3.2" fill="#fde68a"/>
+      </svg>
+      <p class="brand-name">Keryan <span>Analystic</span></p>
+    </div>
+    <h1 id="pageTitle">Connexion</h1>
+    <p class="subtitle">Accès privé. Aucun compte ne peut être créé depuis cette page.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="field-group">
+        <label class="field-label" for="email">Adresse e-mail</label>
+        <div class="input-wrap">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2.5 6.5 8.3 6a2 2 0 0 0 2.4 0l8.3-6"/></svg>
+          <input class="field" id="email" name="email" type="email" autocomplete="username" inputmode="email" placeholder="prenom.nom@entreprise.com" required aria-describedby="emailError">
+        </div>
+        <p class="error" id="emailError" role="alert">Saisis une adresse e-mail valide.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="password">Mot de passe</label>
+        <div class="input-wrap">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.3" fill="currentColor" stroke="none"/></svg>
+          <input class="field password" id="password" name="password" type="password" autocomplete="current-password" placeholder="Mot de passe" required aria-describedby="passwordError">
+          <button class="toggle" type="button" id="togglePwd" aria-label="Afficher le mot de passe">
+            <svg id="eyeOpen" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.2 12S5.7 5.5 12 5.5 21.8 12 21.8 12 18.3 18.5 12 18.5 2.2 12 2.2 12Z"/><circle cx="12" cy="12" r="3.1"/></svg>
+            <svg id="eyeClosed" class="hidden" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 6.1A9.6 9.6 0 0 1 12 6c6.3 0 9.8 6 9.8 6a17 17 0 0 1-3.2 3.9M6.4 7.7A17 17 0 0 0 2.2 12S5.7 18 12 18a9.7 9.7 0 0 0 3.9-.8"/><path d="M9.9 9.9a3.1 3.1 0 0 0 4.3 4.3"/></svg>
+          </button>
+        </div>
+        <p class="error" id="passwordError" role="alert">Saisis ton mot de passe.</p>
+      </div>
+
+      <div class="options">
+        <label class="remember"><input type="checkbox" id="remember" checked><span>Se souvenir de moi</span></label>
+        <span class="secure" title="La connexion est chiffrée par HTTPS">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          HTTPS
+        </span>
+      </div>
+
+      <button type="submit" id="loginButton" class="primary">
+        <span id="btnText">Se connecter</span>
+        <svg id="btnArrow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <span id="btnSpinner" class="spinner hidden" aria-hidden="true"></span>
+      </button>
+      <p id="loginMessage" class="message hidden" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+</main>
+
+<div id="loaderView" class="hidden" role="status" aria-label="Chargement de l’application">
+  <div class="loader" aria-hidden="true"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+  "use strict";
+
+  // Les clés publishable Supabase sont destinées à être publiques.
+  // Ne place JAMAIS une clé service_role ou un autre secret dans ce fichier.
+  const SUPABASE_URL = "https://ixvlthuinkfszhutqwqd.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_svdzuBz5EFSrGAYuOAOEaQ_5tTaeCan";
+  const FUNCTION_NAME = "keryan-api";
+
+  const $ = (id) => document.getElementById(id);
+  const form = $("loginForm"), emailEl = $("email"), pwdEl = $("password");
+  const button = $("loginButton"), btnText = $("btnText"), btnArrow = $("btnArrow");
+  const btnSpinner = $("btnSpinner"), message = $("loginMessage");
+  const emailError = $("emailError"), passwordError = $("passwordError");
+  const loginView = $("loginView"), loaderView = $("loaderView");
+  const togglePwd = $("togglePwd");
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  let submitting = false;
+  let client = null;
+
+  function showMessage(text, type = "info") {
+    message.textContent = text;
+    message.className = "message " + type;
+  }
+  function clearMessage() {
+    message.textContent = "";
+    message.className = "message hidden";
+  }
+  function setFieldError(input, errorBox, invalid, text) {
+    input.classList.toggle("invalid", invalid);
+    input.setAttribute("aria-invalid", invalid ? "true" : "false");
+    errorBox.textContent = text;
+    errorBox.classList.toggle("show", invalid);
+  }
+  function setBusy(busy) {
+    button.disabled = busy;
+    btnText.textContent = busy ? "Connexion en cours…" : "Se connecter";
+    btnArrow.classList.toggle("hidden", busy);
+    btnSpinner.classList.toggle("hidden", !busy);
+  }
+  function showLogin(text, type = "info") {
+    loaderView.classList.add("hidden");
+    loginView.classList.remove("hidden");
+    if (text) showMessage(text, type);
+  }
+  function showLoader() {
+    loginView.classList.add("hidden");
+    loaderView.classList.remove("hidden");
+  }
+
+  // Si la bibliothèque CDN n'est pas chargée, le formulaire reste utilisable
+  // pour afficher une erreur explicite au lieu de laisser un bouton inactif.
+  if (!window.supabase || typeof window.supabase.createClient !== "function") {
+    showMessage("La bibliothèque Supabase n’a pas pu être chargée. Vérifie ta connexion Internet ou le blocage du CDN, puis actualise la page.", "error");
+    button.disabled = true;
+    return;
+  }
+
+  client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth: {
+      persistSession: $("remember").checked,
+      autoRefreshToken: true,
+      detectSessionInUrl: false
+    },
+    global: {
+      headers: { "X-Client-Info": "keryan-analystic-login" }
+    }
+  });
+
+  $("remember").addEventListener("change", () => {
+    // La préférence est appliquée lors de la prochaine initialisation du client.
+    // On ne prétend pas changer rétroactivement le stockage de la session active.
+  });
+
+  emailEl.addEventListener("input", () => setFieldError(emailEl, emailError, false, "Saisis une adresse e-mail valide."));
+  pwdEl.addEventListener("input", () => setFieldError(pwdEl, passwordError, false, "Saisis ton mot de passe."));
+
+  togglePwd.addEventListener("click", () => {
+    const reveal = pwdEl.type === "password";
+    pwdEl.type = reveal ? "text" : "password";
+    $("eyeOpen").classList.toggle("hidden", reveal);
+    $("eyeClosed").classList.toggle("hidden", !reveal);
+    togglePwd.setAttribute("aria-label", reveal ? "Masquer le mot de passe" : "Afficher le mot de passe");
+    pwdEl.focus();
+  });
+
+  async function loadApplication(session) {
+    // IMPORTANT : pas de garde `if (submitting) return` ici.
+    // Le formulaire a déjà verrouillé le bouton avant cet appel.
+    if (!session || !session.access_token) {
+      throw new Error("Session absente après authentification. Recommence la connexion.");
+    }
+
+    showLoader();
+
+    const { data, error } = await client.functions.invoke(FUNCTION_NAME, {
+      body: { action: "get_project" }
+    });
+
+    if (error) {
+      // Le détail reste dans la console pour aider au diagnostic.
+      console.error("[Keryan Analystic] Échec de keryan-api :", error);
+      let serverDetail = "";
+      try {
+        if (error.context && typeof error.context.clone === "function") {
+          const response = error.context.clone();
+          const payload = await response.json();
+          if (payload && typeof payload.error === "string") serverDetail = payload.error;
+        } else if (error.context && typeof error.context.json === "function") {
+          const payload = await error.context.json();
+          if (payload && typeof payload.error === "string") serverDetail = payload.error;
+        }
+      } catch (_) {}
+      throw new Error(serverDetail || "L’authentification a réussi, mais le serveur n’a pas pu charger le projet. Vérifie les journaux de l’Edge Function.");
+    }
+
+    if (!data || typeof data.code_html !== "string" || !data.code_html.trim()) {
+      console.error("[Keryan Analystic] Réponse inattendue de keryan-api :", data);
+      throw new Error("Le serveur n’a pas renvoyé le champ code_html attendu.");
+    }
+
+    // Sécurité : ce HTML est du code exécutable. Ne l'accepte que depuis une
+    // Edge Function contrôlée par toi, qui vérifie le JWT et l'utilisateur autorisé.
+    // N'autorise jamais un utilisateur non fiable à modifier le code_html en base.
+    document.open();
+    document.write(data.code_html);
+    document.close();
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    console.info("[Keryan Analystic] Soumission du formulaire détectée.");
+
+    if (submitting) return;
+    clearMessage();
+
+    const email = emailEl.value.trim();
+    const password = pwdEl.value;
+    let valid = true;
+
+    if (!EMAIL_RE.test(email)) {
+      setFieldError(emailEl, emailError, true, "Saisis une adresse e-mail valide.");
+      valid = false;
+    } else setFieldError(emailEl, emailError, false, "Saisis une adresse e-mail valide.");
+
+    if (!password) {
+      setFieldError(pwdEl, passwordError, true, "Saisis ton mot de passe.");
+      valid = false;
+    } else setFieldError(pwdEl, passwordError, false, "Saisis ton mot de passe.");
+
+    if (!valid) {
+      showMessage("Vérifie les champs signalés.", "error");
+      return;
+    }
+
+    submitting = true;
+    setBusy(true);
+    showMessage("Vérification des identifiants…", "info");
+
+    try {
+      const { data, error } = await client.auth.signInWithPassword({ email, password });
+      if (error) {
+        console.warn("[Keryan Analystic] Échec de connexion Supabase :", error.message);
+        // Message volontairement générique pour ne pas révéler si un compte existe.
+        throw new Error("Connexion refusée. Vérifie ton e-mail et ton mot de passe.");
+      }
+      if (!data || !data.session) throw new Error("Supabase n’a pas renvoyé de session valide.");
+      await loadApplication(data.session);
+    } catch (err) {
+      console.error("[Keryan Analystic] Échec :", err);
+      await client.auth.signOut().catch(() => {});
+      showLogin(err && err.message ? err.message : "Une erreur inattendue est survenue.", "error");
+    } finally {
+      submitting = false;
+      setBusy(false);
+    }
+  });
+
+  // Diagnostic non sensible : ne journalise jamais l'e-mail, le mot de passe,
+  // le JWT ou les clés.
+  console.info("[Keryan Analystic] Interface initialisée. Supabase client prêt.");
+})();
+</script>
+</body>
+</html>
